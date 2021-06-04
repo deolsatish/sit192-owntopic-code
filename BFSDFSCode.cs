@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +9,7 @@ namespace BFSCODE
         class Graph
         {
             private int V;
+            String str;
 
             //Array of Adjacency Linnked list- Each vertex has a linkedlist
             //Adjacency list
@@ -38,6 +39,7 @@ namespace BFSCODE
                     adjlist[i] = new LinkedList<int>();
                 }
                 V = v;
+                str = "";
             }
             public void addEdge(LinkedList<int>[] g, int v, int w)
             {
@@ -61,24 +63,25 @@ namespace BFSCODE
                     throw new ArgumentNullException(nameof(g));
                 }
 
-                LinkedList<int> queue = new LinkedList<int>();
+                LinkedList<int> queue = new LinkedList<int>(); //This is our Queue to store vertices
 
-                queue.AddLast(u);
+                queue.AddLast(u);  //Adding start vertex
 
-                d[u] = 0;
-                color[u] = "gray";
+                d[u] = 0;   //Start vertex distance to itself will be zero
+                color[u] = "gray"; // we have discovered start vertex yet to discover all of its neighbour vertices
                 while(queue.Any())
                 {
                     u = queue.First();
+                    str = str+ u + " " + "-> ";
                     Console.WriteLine(u + " " + "-> ");
                     queue.RemoveFirst();
 
 
-                    LinkedList<int> list = g[u];
+                    LinkedList<int> list = g[u]; //Contains list of nieghbouring vertices of u
 
-                    foreach (var val in list)
+                    foreach (var val in list) //This for loop goes thourgh all the neighbouring vertices
                     {
-                        Console.WriteLine("For loop for neighbouring vertices");
+                        Console.WriteLine("For loop for discovering neighbouring vertices");
                         if (color[val]=="white")
                         {
                             color[val] = "gray";
@@ -88,8 +91,9 @@ namespace BFSCODE
                             queue.AddLast(val);
                         }
                     }
+                    //After discovering all its vertices, it's color needs to be changed to black as it has been fully discovered
                     color[u] = "black";
-                    Console.WriteLine();
+                    Console.WriteLine("-------------------------------------");
                     Console.WriteLine("chossing a new vertext to discover its neighbours");
 
                 }
@@ -97,14 +101,15 @@ namespace BFSCODE
 
             public void BFSFull(LinkedList<int>[] g, int n)
             {
-                for(int i=0;i<n;i++)
+                str = "";
+                for(int i=0;i<n;i++) //initialising all vertices with initial values
                 {
                     color[i] = "white";
-                    d[i] = 0; //Basically infinity
-                    p[i] = -1;
+                    d[i] = int.MaxValue; //Basically infinity
+                    p[i] = -1; //All vertices start from 0 index, thus -1 is a non-existent vertex.
 
                 }
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < 1; i++) // This run the BFSSinglesource code for all vertices n or you can change it to a specific vertex as well as done here for vertex 0 as source
                 {
                     if(color[i]=="white")
                     {
@@ -112,6 +117,7 @@ namespace BFSCODE
                     }
 
                 }
+                Console.WriteLine("BFS Output: " + str);
 
             }
             //public void print_path()
@@ -124,40 +130,40 @@ namespace BFSCODE
 
             //}
 
-            public void BFS(int s)
-            {
-                //Initialising all vertices.
-                bool[] visited = new bool[V];
-                for (int i = 0; i < V; i++)
-                    visited[i] = false;
+            //public void BFS(int s)
+            //{
+            //    //Initialising all vertices.
+            //    bool[] visited = new bool[V];
+            //    for (int i = 0; i < V; i++)
+            //        visited[i] = false;
                 
-                //This is our Priority Queue
-                LinkedList<int> queue = new LinkedList<int>();
+            //    //This is our Priority Queue
+            //    LinkedList<int> queue = new LinkedList<int>();
 
-                //We are visiting s source vertex first
-                visited[s] = true;
+            //    //We are visiting s source vertex first
+            //    visited[s] = true;
 
-                //We are adding it to the queue
-                queue.AddLast(s);
+            //    //We are adding it to the queue
+            //    queue.AddLast(s);
 
-                while (queue.Any()) // as long as queue contains some element
-                {
-                    s = queue.First();
-                    Console.Write(s + " " +"-> ");
-                    queue.RemoveFirst();
+            //    while (queue.Any()) // as long as queue contains some element
+            //    {
+            //        s = queue.First();
+            //        Console.Write(s + " " +"-> ");
+            //        queue.RemoveFirst();
 
-                    LinkedList<int> list = adjlist[s];
+            //        LinkedList<int> list = adjlist[s];
 
-                    foreach (var val in list)
-                    {
-                        if (!visited[val])
-                        {
-                            visited[val] = true;
-                            queue.AddLast(val);
-                        }
-                    }
-                }
-            }
+            //        foreach (var val in list)
+            //        {
+            //            if (!visited[val])
+            //            {
+            //                visited[val] = true;
+            //                queue.AddLast(val);
+            //            }
+            //        }
+            //    }
+            //}
             public void DFSrecursive(int v, bool[] visited)
             {
                 //v is current vertex
@@ -221,8 +227,11 @@ namespace BFSCODE
             //Console.WriteLine("Using BFSSIngleSource");
             //graph1.BFSSingleSource(g, 2);
 
-
-            Console.WriteLine("Hello World!");
+        
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*__*_*_*_*_*_*_*_*_*_*_*__*_*_*_*_*_*_");
+            Console.WriteLine("New Graph for DFS code testing");
             Graph graph = new Graph(4);
             graph.AddEdge(0, 1);
             graph.AddEdge(0, 2);
@@ -232,14 +241,14 @@ namespace BFSCODE
             graph.AddEdge(3, 3);
 
 
+            //Console.WriteLine();
+
+            //Console.WriteLine("We now use BFS and print out the priority Queue :");
+
+            //graph.BFS(2); // 2 is index of source vertex
+
             Console.WriteLine();
-
-            Console.WriteLine("We now use BFS and print out the priority Queue :");
-
-            graph.BFS(2); // 2 is index of source vertex
-
-            Console.WriteLine();
-            Console.WriteLine(" We are now using DFS strating from 2");
+            Console.WriteLine("We are now using DFS strating from 2");
             graph.DFS(2);
 
            
